@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <mpi.h>
+#include <unistd.h>
 
 const int MAX_STRING = 100;
 
@@ -15,22 +16,18 @@ int main(void){
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
     if (my_rank == 0){
-
-        printf("Enter value\n");
-        scanf("%lf ", &n_p);
-        while (True){
-            MPI_Send(&n_p, 1, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD);
-            // generate value
-            MPI_Recv(&n_p, 1, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        }
+        //get time
+        // get hostname
+        MPI_Send(&n_p, 1, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD);
+        MPI_Recv(&n_p, 1, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        //display exec time
         
-    } else {
-        while (True){
+    } elif (my_rank == 1) {
+            //get time
             MPI_Send(&n_p, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
-            // generate value
+            // get hostname
             MPI_Recv(&n_p, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        }
-
+            //display exec time
     }
     
     MPI_Finalize();

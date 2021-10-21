@@ -22,7 +22,7 @@ int main(void){
                 MPI_CHAR, 
                 0, 
                 0, 
-                MPI_COMM_WORLD)
+                MPI_COMM_WORLD);
     } else {
         printf("Greetings from process %d of %d!\n",
                 my_rank,
