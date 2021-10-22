@@ -18,29 +18,24 @@ int main(void){
     if (my_rank == 0){
         //get time
         gethostname(hostname, HOST_NAME_MAX + 1);
-        for (int i = 0; i < HOST_NAME_MAX+1; i++){
-            MPI_Send(&hostname[i], 1, MPI_CHAR, 1, 0, MPI_COMM_WORLD);
-        }
+
+        MPI_Send(&hostname, HOST_NAME_MAX+1, MPI_CHAR, 1, 0, MPI_COMM_WORLD);
         
-        for (int i = 0; i < HOST_NAME_MAX+1; i++){
-            MPI_Recv(&hostname[i], 1, MPI_CHAR, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        }
+        MPI_Recv(&hostname, HOST_NAME_MAX+1, MPI_CHAR, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
         printf("Received hostname in process %d: %s\n", my_rank, hostname);
         //display exec time
         
     } else if (my_rank == 1) {
             //get time
-            for (int i = 0; i < HOST_NAME_MAX+1; i++){
-                MPI_Recv(&hostname[i], 1, MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            }
+            MPI_Recv(&hostname, HOST_NAME_MAX+1, MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        
 
             printf("Received hostname in process %d: %s\n", my_rank, hostname);
 
             gethostname(hostname, HOST_NAME_MAX + 1);
             
-            for (int i = 0; i < HOST_NAME_MAX+1; i++){
-                MPI_Send(&hostname[i], 1, MPI_CHAR, 0, 0, MPI_COMM_WORLD);
-            }
+            MPI_Send(&hostname, HOST_NAME_MAX + 1, MPI_CHAR, 0, 0, MPI_COMM_WORLD);
             //display exec time
     }
     

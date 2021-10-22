@@ -20,22 +20,23 @@ int main(void){
         // get hostname
 
         gethostname(hostname, HOST_NAME_MAX + 1);
+        
         printf("[PROCESS %d] Sending hostname %s from process %d to process %d!\n", my_rank, hostname, my_rank, my_rank+1);
-        for (int i = 0; i < HOST_NAME_MAX+1; i++){
-            MPI_Send(&hostname[i], 1, MPI_CHAR, 1, 0, MPI_COMM_WORLD);
-        }
+        
+        MPI_Send(&hostname, HOST_NAME_MAX+1, MPI_CHAR, 1, 0, MPI_COMM_WORLD);
+        
     } else {
-        for (int i = 0; i < HOST_NAME_MAX+1; i++){
-            MPI_Recv(&hostname[i], 1, MPI_CHAR, my_rank-1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        }
+        
+        MPI_Recv(&hostname, HOST_NAME_MAX+1, MPI_CHAR, my_rank-1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        
 
         printf("[PROCESS %d] Received hostname %s from process %d!\n", my_rank, hostname, my_rank-1);
 
         if(my_rank != comm_sz-1){
             printf("[PROCESS %d] Sending hostname %s from process %d to process %d!\n", my_rank, hostname, my_rank, my_rank+1);
-            for (int i = 0; i < HOST_NAME_MAX+1; i++){
-                MPI_Send(&hostname[i], 1, MPI_CHAR, my_rank+1, 0, MPI_COMM_WORLD);
-            }
+            
+            MPI_Send(&hostname, HOST_NAME_MAX+1, MPI_CHAR, my_rank+1, 0, MPI_COMM_WORLD);
+            
         }
     }
     
