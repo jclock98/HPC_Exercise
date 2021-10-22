@@ -5,4 +5,5 @@
 # set execution queue
 #PBS -q short_cpuQ
 module load mpich-3.2
+mpicc -g -Wall -o build/
 mpirun.actual -n 4 
